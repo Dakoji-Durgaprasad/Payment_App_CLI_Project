@@ -1,3 +1,4 @@
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -63,7 +64,13 @@ public class RunPaymentsApp {
 				}
 			} else if (op.equalsIgnoreCase("5")) {
 				System.out.println("List of users");
-				uop.printUsersList(userList);
+				// uop.printUsersList(userList);
+				try {
+					PaymentAppCliDAO dao = new PaymentAppCliDAO();
+					dao.printUserDetails();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
 			} else if (op.equalsIgnoreCase("6")) {
 				if (currUserId != -1) {
 					System.out.println("Current users");
