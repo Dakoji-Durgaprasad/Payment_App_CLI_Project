@@ -25,5 +25,22 @@ public class PaymentAppCliDAO {
 			e.printStackTrace();
 		}
 
+			public static void storeUserBankAcctDetails(BankAccount ba) throws SQLException {
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/Payments_App_CLI", "root",
+					"root");
+			Statement st = con.createStatement();
+			String query = "insert into BankAccount_Details(Account_Number,Acct_IFSC,Bank_Name,Bank_Acct_Pin,Acct_Type,UserId) "
+					+ "values('"+ba.getBankAcctNumber()+"','"+ba.getBankAcctIFSC()+"','"+ba.getBankAcctBankName()+"','"+ba.getBankAcctType()+"','"+ba.getBankAcctPin()+"','"+ba.getUserId()+"')";
+			
+			int rs = st.executeUpdate(query);
+			System.out.println(rs + "row/s effected");
+
+			con.close();
+			
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
 	}
 }
