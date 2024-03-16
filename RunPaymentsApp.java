@@ -205,7 +205,9 @@ public class RunPaymentsApp {
 				u.getBaList().add(ba);
 			}
 		}
-		baAcctList.add(ba);
+		// baAcctList.add(ba);
+		PaymentAppCliDAO dao = new PaymentAppCliDAO();
+			dao.storeUserBankAcctDetails(ba);
 	}
 
 	public static void printUserBankAccounts() {
