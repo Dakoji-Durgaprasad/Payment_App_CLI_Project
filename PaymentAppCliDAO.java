@@ -10,13 +10,14 @@ public class PaymentAppCliDAO {
 
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
-			Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/Payments_App_CLI", "root", "");
+			Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/Payments_App_CLI", "root",
+					"root");
 			Statement st = con.createStatement();
-			String query = "insert into User_info(First_Name,Last_Name,Phone_Number,Date_Of_Birth,Address,Password) "
+			String storeUserDetailsQuery = "insert into User_info(First_Name,Last_Name,Phone_Number,Date_Of_Birth,Address,Password) "
 					+ "values('" + u.getFirstName() + "','" + u.getLastName() + "','" + u.getPhoneNumber() + "','"
 					+ u.getDateOfBirth() + "','" + u.getAddress() + "','" + u.getPassword() + "')";
 
-			int rs = st.executeUpdate(query);
+			int rs = st.executeUpdate(storeUserDetailsQuery);
 			System.out.println(rs + "row/s effected");
 
 			con.close();
@@ -30,10 +31,11 @@ public class PaymentAppCliDAO {
 		User u = new User();
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
-			Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/Payments_App_CLI", "root", "");
+			Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/Payments_App_CLI", "root",
+					"root");
 			Statement st = con.createStatement();
-			String query = "select * from User_info";
-			ResultSet rs = st.executeQuery(query);
+			String printUserDetailsQuery = "select * from User_info";
+			ResultSet rs = st.executeQuery(printUserDetailsQuery);
 			while (rs.next()) {
 				System.out.println(
 						rs.getInt("Id") + " : " + rs.getString("First_Name") + " : " + rs.getString("Last_Name") + " : "
@@ -47,46 +49,82 @@ public class PaymentAppCliDAO {
 		}
 	}
 
-	public static boolean Logindb(int Uid, String PassWord) throws SQLException {
+	public static boolean verifyUserLogin(int uId, String pswd) throws SQLException {
 		User u = new User();
-			try {
-				Class.forName("com.mysql.cj.jdbc.Driver");
-			} catch (ClassNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			Connection Con = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/test", "root", "uda7650");
-			Statement st = Con.createStatement();
-			String Uquery = "select Id,Password from User_info where User_Id = '" + u.getUserId() + "'and Password ='"
-					+ u.getPassword() + "'";
-			ResultSet res = st.executeQuery(Uquery);
-			if (res.next()) {
-				res.next();
-				System.out.println("Login Successfull!");
-				return true;
-			} else {
-				System.out.println("Login Failed!");
-			}
-			st.close();
-		
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/Payments_App_CLI", "root",
+					"root");
+			Statement st = con.createStatement();
+			String verifyUserLoginQuery = "select Id,Password from User_info where Id = '" + u.getUserId()
+					+ "'and Password ='" + u.getPassword() + "'";
+			ResultSet rs = st.executeQuery(verifyUserLoginQuery);
+			
+			boolean	LoginUser = rs.next();
+			RunPaymentsApp.currUserId = uId;
+				System.out.println("Login successful!");
+				st.close();
+				con.close();
+				return LoginUser;
+				
+//			while (rs.next()) {
+////				if (Integer.valueOf(u.getUserId())==uId) {
+////					if(pswd.equals(u.getPassword())){
+//				if (rs.equals(uId)) {
+//					if (rs.equals(pswd)) {
+//						// RunPaymentsApp.currUserId = uId;
+//						System.out.println("Login Successfull!");
+//						return true;
+//					}
+//				}
+//				// System.out.println("Login Failed!");
+//			}
+//			System.out.println("Login Failed!");
+			
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+
 		return false;
 	}
 
 	public static void storeUserBankAcctDetails(BankAccount ba) throws SQLException {
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
-			Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/Payments_App_CLI", "root", "");
+			Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/Payments_App_CLI", "root",
+					"root");
 			Statement st = con.createStatement();
-			String query = "insert into BankAccount_Details(Account_Number,Acct_IFSC,Bank_Name,Bank_Acct_Pin,Acct_Type,UserId) "
+			String storeUserBankAcctDetailsQuery = "insert into BankAccount_Details(Account_Number,Acct_IFSC,Bank_Name,Bank_Acct_Pin,Acct_Type,UserId) "
 					+ "values('" + ba.getBankAcctNumber() + "','" + ba.getBankAcctIFSC() + "','"
-					+ ba.getBankAcctBankName() + "','" + ba.getBankAcctType() + "','" + ba.getBankAcctPin() + "','"
-					+ ba.getUserId() + "')";
+					+ ba.getBankAcctBankName() + "','" + ba.getBankAcctType() + "','" + ba.getBankAcctPin() + "')";
 
-			int rs = st.executeUpdate(query);
+			int rs = st.executeUpdate(storeUserBankAcctDetailsQuery);
 			System.out.println(rs + "row/s effected");
 
 			con.close();
 
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+
+	}
+
+	public static void printUserBankAcctDetails(BankAccount ba) throws SQLException {
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/Payments_App_CLI", "root",
+					"root");
+			Statement st = con.createStatement();
+			String printUserBankAcctDetailsQuery = "SELECT * FORM BankAccount_Details";
+			ResultSet rs = st.executeQuery(printUserBankAcctDetailsQuery);
+
+			while (rs.next()) {
+				System.out.println(
+						rs.getInt("Id") + " : " + rs.getString("Account_Number") + " : " + rs.getString("Acct_IFSC")
+								+ " : " + rs.getLong("Bank_Name") + " : " + rs.getString("Bank_Acct_Pin") + " : "
+								+ rs.getString("Acct_Type") + " : " + rs.getString("User_Id"));
+			}
+			con.close();
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
