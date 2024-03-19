@@ -27,26 +27,26 @@ public class UserOperations {
 		return u;
 	}
 	
-	public void printUsersList(List<User> users) {
-		for(User u:users) {
-			if(users!=null) {
-				System.out.println("User Details of : "+u.getFirstName());
-				System.out.println(u);
-			}
-		}
-	}
+//	public void printUsersList(List<User> users) {
+//		for(User u:users) {
+//			if(users!=null) {
+//				System.out.println("User Details of : "+u.getFirstName());
+//				System.out.println(u);
+//			}
+//		}
+//	}
 	
-	public boolean verifyUserLogin(String uId,String pswd) {
-		for(int i=0;i<users.size();i++) {
-			if(String.valueOf(users.get(i).getUserId()).equals(uId)) {
-				if(pswd.equals(users.get(i).getPassword())) {
-					return true;
-				}
-			}
-		}
-		return false;
-	}
-	
+//	public boolean verifyUserLogin(String uId,String pswd) {
+//		for(int i=0;i<users.size();i++) {
+//			if(String.valueOf(users.get(i).getUserId()).equals(uId)) {
+//				if(pswd.equals(users.get(i).getPassword())) {
+//					return true;
+//				}
+//			}
+//		}
+//		return false;
+//	}
+//	
 	public void printCurrUserDetails(int UserId) {
 		for(User u:users) {
 			if(u.getUserId()==UserId) {
