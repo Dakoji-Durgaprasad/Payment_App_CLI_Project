@@ -53,7 +53,11 @@ public class RunPaymentsApp {
 				Registration();
 			} else if (op.equalsIgnoreCase("2")) {
 				System.out.println("Login");
-				Login();
+				try {
+					login();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
 			} else if (op.equalsIgnoreCase("3")) {
 				if (validateCurrUser()) {
 					System.out.println("Please Enter bank account details: ");
@@ -76,6 +80,7 @@ public class RunPaymentsApp {
 			} else if (op.equalsIgnoreCase("6")) {
 				if (currUserId != -1) {
 					System.out.println("Current users");
+					
 					uop.printCurrUserDetails(currUserId);
 				}
 			} else if (op.equalsIgnoreCase("7")) {
@@ -120,7 +125,7 @@ public class RunPaymentsApp {
 
 		User u;
 		u = uop.doUserRegistration(fname, lname, phnum, dob, addr, pswd);
-		//userList.add(u);
+		// userList.add(u);
 		PaymentAppCliDAO dao = new PaymentAppCliDAO();
 		try {
 			dao.storeUserDetails(u);
@@ -132,20 +137,21 @@ public class RunPaymentsApp {
 		int userId = u.getUserId();
 		walletList.put(userId, wallet);
 
-		
 	}
 
-	public static boolean Login() {
+	public static boolean login() throws SQLException {
 		Scanner sc = new Scanner(System.in);
-		UserOperations uop = new UserOperations();
+		// UserOperations uop = new UserOperations();
 
 		System.out.println("Enter Your User ID: ");
-		String uId = sc.next();
+		int uId = sc.nextInt();
 		System.out.println("Enter Your Password: ");
 		String pswd = sc.next();
+		PaymentAppCliDAO dao = new PaymentAppCliDAO();
 
-		if (uop.verifyUserLogin(uId, pswd)) {
-			currUserId = Integer.parseInt(uId);
+		if (PaymentAppCliDAO.verifyUserLogin(uId, pswd)) {
+			currUserId = uId;
+			dao.verifyUserLogin(uId, pswd);
 			return true;
 		} else {
 			System.out.println("Login Failed, please try again!!");
@@ -215,12 +221,11 @@ public class RunPaymentsApp {
 		}
 		// baAcctList.add(ba);
 		PaymentAppCliDAO dao = new PaymentAppCliDAO();
-			try {
-				dao.storeUserBankAcctDetails(ba);
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+		try {
+			dao.storeUserBankAcctDetails(ba);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public static void printUserBankAccounts() {
