@@ -23,8 +23,8 @@ SELECT * FROM User_info;
 show tables;
 
 CREATE TABLE Bank_Account_Type(
-Id INT PRIMARY KEY AUTO_INCREMENT,
-Acct_Type_Code VARCHAR(3) UNIQUE,
+Id INT UNIQUE NOT NULL AUTO_INCREMENT,
+Acct_Type_Code VARCHAR(3) PRIMARY KEY,
 Acct_Type_Name VARCHAR(15)
 );
 INSERT INTO Bank_Account_Type(Id,Acct_Type_Code,Acct_Type_Name) 
@@ -42,8 +42,8 @@ Account_Number INT UNIQUE NOT NULL,
 Acct_IFSC VARCHAR(20) NOT NULL,
 Bank_Name VARCHAR(30) NOT NULL,
 Bank_Acct_Pin VARCHAR(15) NOT NULL,
-Acct_Type INT(3) NOT NULL, 
-FOREIGN KEY(Acct_Type) REFERENCES Bank_Account_Type(Id)
+Acct_Type VARCHAR(3) NOT NULL, 
+FOREIGN KEY(Acct_Type) REFERENCES Bank_Account_Type(Acct_Type_Code)
 ON UPDATE CASCADE
 ON DELETE CASCADE,
 User_Id  INT NOT NULL, FOREIGN KEY(User_Id) REFERENCES User_info(Id)
