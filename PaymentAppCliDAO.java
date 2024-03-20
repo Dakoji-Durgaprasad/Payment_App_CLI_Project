@@ -59,14 +59,14 @@ public class PaymentAppCliDAO {
 			String verifyUserLoginQuery = "select Id,Password from User_info where Id = '" + u.getUserId()
 					+ "'and Password ='" + u.getPassword() + "'";
 			ResultSet rs = st.executeQuery(verifyUserLoginQuery);
-			
-			boolean	LoginUser = rs.next();
+
+			boolean LoginUser = rs.next();
 			RunPaymentsApp.currUserId = uId;
-				System.out.println("Login successful!");
-				st.close();
-				con.close();
-				return LoginUser;
-				
+			System.out.println("Login successful!");
+			st.close();
+			con.close();
+			return LoginUser;
+
 //			while (rs.next()) {
 ////				if (Integer.valueOf(u.getUserId())==uId) {
 ////					if(pswd.equals(u.getPassword())){
@@ -80,7 +80,7 @@ public class PaymentAppCliDAO {
 //				// System.out.println("Login Failed!");
 //			}
 //			System.out.println("Login Failed!");
-			
+
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
@@ -94,9 +94,9 @@ public class PaymentAppCliDAO {
 			Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/Payments_App_CLI", "root",
 					"root");
 			Statement st = con.createStatement();
-			String storeUserBankAcctDetailsQuery = "insert into BankAccount_Details(Account_Number,Acct_IFSC,Bank_Name,Bank_Acct_Pin,Acct_Type,UserId) "
+			String storeUserBankAcctDetailsQuery = "insert into BankAccount_Details(Account_Number,Acct_IFSC,Bank_Name,Bank_Acct_Pin,Acct_Type,Id) "
 					+ "values('" + ba.getBankAcctNumber() + "','" + ba.getBankAcctIFSC() + "','"
-					+ ba.getBankAcctBankName() + "','" + ba.getBankAcctType() + "','" + ba.getBankAcctPin() + "')";
+					+ ba.getBankAcctBankName() + "','" + ba.getBankAcctPin() + "','" + ba.getBankAcctType() + "','"+ba.getUserId()+"')";
 
 			int rs = st.executeUpdate(storeUserBankAcctDetailsQuery);
 			System.out.println(rs + "row/s effected");
