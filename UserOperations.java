@@ -93,4 +93,49 @@ public class UserOperations {
 		return walletList.get(RunPaymentsApp.currUserId ).getBalance();
 	}
 
+		public boolean transaction(Wallet sender , Wallet receiver , TxnType type,double amount) {
+		if(sender.getBalance()>amount) {
+			receiver.setBalance(receiver.getBalance()+amount);
+			sender.setBalance(sender.getBalance()-amount);
+			return true;
+		}
+		return false;
+
+
+	}
+	public boolean transaction(BankAccount sender , BankAccount receiver , TxnType tType,double amount) {
+		if(sender.getBankBalance()>amount) {
+			receiver.setBankBalance(receiver.getBankBalance()+amount);
+			sender.setBankBalance(sender.getBankBalance()-amount);
+			return true;
+		}
+		return false;
+
+
+	}
+	public boolean transaction(BankAccount sender , Wallet receiver , TxnType type,double amount) {
+		if(sender.getBankBalance()>amount) {
+			receiver.setBalance(receiver.getBalance()+amount);
+			sender.setBankBalance(sender.getBankBalance()-amount);
+			return true;
+		}
+		return false;
+
+
+	}
+	public boolean transaction(Wallet sender , BankAccount receiver , TxnType type,double amount) {
+		if(sender.getBalance()>amount) {
+			receiver.setBankBalance(receiver.getBankBalance()+amount);
+			sender.setBalance(sender.getBalance()-amount);
+			return true;
+		}
+		return false;
+
+
+	}
+	public  void creditAmountToAccount(BankAccount bankAccount,double amount) {
+		bankAccount.setBankBalance(bankAccount.getBankBalance()+amount);
+		System.out.println("Money added to your account \n");
+	}
+
 }
