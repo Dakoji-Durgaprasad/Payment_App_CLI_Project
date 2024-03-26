@@ -6,6 +6,16 @@ public class BankAccount {
 	private String bankAcctBankName;
 	private String bankAcctType;
 	private String bankAcctPin;
+	private double bankBalance;
+
+	public double getBankBalance() {
+		return bankBalance;
+	}
+
+	public void setBankBalance(double bankBalance) {
+		this.bankBalance = bankBalance;
+	}
+
 
 	private int UserId;
 
