@@ -27,7 +27,7 @@ public class RunPaymentsApp {
 		int SelectedOption = 0;
 
 		while (true) {
-			System.out.println("Please choose an option from below: ");
+			System.out.println("\nPlease choose an option from below: ");
 			System.out.println("1.Registration");
 			System.out.println("2.Login");
 			System.out.println("3.Add bank account");
