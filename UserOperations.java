@@ -47,28 +47,28 @@ public class UserOperations {
 //		return false;
 //	}
 //	
-	public void printCurrUserDetails(int UserId) {
-		for(User u:users) {
-			if(u.getUserId()==UserId) {
-				System.out.println(u);
-			}
-			else {
-				System.out.println("No user logged in");
-			}
-		}
-	}
-	
-	public Map<User,List<BankAccount>> getUsersBankAccount(){
-		
-		Map<User,List<BankAccount>> userBankAcctMap = new HashMap<User,List<BankAccount>>();
-		
-		for(User u :users) {
-			if(users!=null) {
-				userBankAcctMap.put(u,u.getBaList());
-			}
-		}
-		return userBankAcctMap;
-	}
+//	public void printCurrUserDetails(int UserId) {
+//		for(User u:users) {
+//			if(u.getUserId()==UserId) {
+//				System.out.println(u);
+//			}
+//			else {
+//				System.out.println("No user logged in");
+//			}
+//		}
+//	}
+////	
+//	public Map<User,List<BankAccount>> getUsersBankAccount(){
+//		
+//		Map<User,List<BankAccount>> userBankAcctMap = new HashMap<User,List<BankAccount>>();
+//		
+//		for(User u :users) {
+//			if(users!=null) {
+//				userBankAcctMap.put(u,u.getBaList());
+//			}
+//		}
+//		return userBankAcctMap;
+//	}
 	
 	public boolean verifyUserBankAccount(String bankAcctNumber,String pin) {
 		for(int i=0;i<baAcctList.size();i++) {
