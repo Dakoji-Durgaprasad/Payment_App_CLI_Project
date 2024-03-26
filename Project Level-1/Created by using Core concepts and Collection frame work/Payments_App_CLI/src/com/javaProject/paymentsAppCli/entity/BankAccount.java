@@ -7,7 +7,7 @@ public class BankAccount {
 	private String bankAcctBankName;
 	private AcctType bankAcctType;
 	private String bankAcctPin;
-	private double bankBalance=2000;
+	private double bankBalance;
 
 	public double getBankBalance() {
 		return bankBalance;
