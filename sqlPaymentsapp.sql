@@ -38,7 +38,7 @@ SELECT * FROM Bank_Account_Type;
 
 CREATE TABLE BankAccount_Details(
 Id INT PRIMARY KEY AUTO_INCREMENT,
-Account_Number INT UNIQUE NOT NULL,
+Account_Number BIGINT UNIQUE NOT NULL,
 Acct_IFSC VARCHAR(20) NOT NULL,
 Bank_Name VARCHAR(30) NOT NULL,
 Bank_Acct_Pin VARCHAR(15) NOT NULL,
@@ -48,11 +48,16 @@ ON UPDATE CASCADE
 ON DELETE CASCADE,
 User_Id  INT NOT NULL, FOREIGN KEY(User_Id) REFERENCES User_info(Id)
 ON UPDATE CASCADE
-ON DELETE CASCADE
+ON DELETE CASCADE,
+BanK_Balance double NOT NULL 
 );
+
+Alter table BankAccount_Details
+add BanK_Balance double NOT NULL ;
 
 DESC BankAccount_Details;
 SELECT * FROM BankAccount_Details;
+-- DELETE FROM BankAccount_Details WHERE Account_Number ="";
 
 CREATE TABLE Transaction_Details(
 Id INT PRIMARY KEY AUTO_INCREMENT,
