@@ -82,21 +82,38 @@ public class RunPaymentsApp {
 				}
 			} else if (op.equalsIgnoreCase("6")) {
 				if (currUserId != -1) {
-					System.out.println("Current users");
+					System.out.println("Current User: ");
 
-					uop.printCurrUserDetails(currUserId);
+					//uop.printCurrUserDetails(currUserId);
+					PaymentAppCliDAO dao = new PaymentAppCliDAO();
+					try {
+						dao.printCurrUserDetails(currUserId);
+					} catch (SQLException e) {
+						e.printStackTrace();
+					}
+					
 				}
 			} else if (op.equalsIgnoreCase("7")) {
 				if (currUserId != -1) {
 					System.out.println("List of users bank accounts");
-					printUserBankAccounts();
+					PaymentAppCliDAO dao = new PaymentAppCliDAO();
+					try {
+						dao.printUserBankAcctDetails();
+					} catch (SQLException e) {
+						e.printStackTrace();
+					}
 				}
 			} else if (op.equalsIgnoreCase("8")) {
 				if (currUserId != -1) {
 					System.out.println("Delete bank account");
 					System.out.println("Enter Bank Account Number: ");
-					String accNum = sc.next();
-					deleteUserBankAccount(currUserId, accNum, userList);
+					int accNum = sc.nextInt();
+					PaymentAppCliDAO dao = new PaymentAppCliDAO();
+					try {
+						dao.deleteUserBankAccount(accNum);
+					} catch (SQLException e) {
+						e.printStackTrace();
+					}
 				} else {
 					System.out.println("please login to delete bank accounts");
 				}
@@ -140,11 +157,12 @@ public class RunPaymentsApp {
 		u = uop.doUserRegistration(fname, lname, phnum, dob, addr, pswd);
 		// userList.add(u);
 		PaymentAppCliDAO dao = new PaymentAppCliDAO();
-		try {
-			dao.storeUserDetails(u);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+	
+			try {
+				dao.storeUserDetails(u);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 
 		Wallet wallet = new Wallet();
 		int userId = u.getUserId();
@@ -162,9 +180,9 @@ public class RunPaymentsApp {
 		String pswd = sc.next();
 		PaymentAppCliDAO dao = new PaymentAppCliDAO();
 
-		if (PaymentAppCliDAO.verifyUserLogin(uId, pswd)) {
+		if (dao.verifyUserLogin(uId, pswd)) {
 			currUserId = uId;
-			dao.verifyUserLogin(uId, pswd);
+			//dao.verifyUserLogin(uId, pswd);
 			return true;
 		}
 		return false;
@@ -238,21 +256,21 @@ public class RunPaymentsApp {
 		}
 	}
 
-	public static void printUserBankAccounts() {
-		UserOperations uop = new UserOperations();
-		Map<User, List<BankAccount>> mapItems = uop.getUsersBankAccount();
-
-		for (User u : mapItems.keySet()) {
-			List<BankAccount> baList = mapItems.get(u);
-			System.out.println(u);
-			if (baList != null) {
-				for (BankAccount ba : baList) {
-					System.out.println("--" + ba.printBankAcctDetails());
-				}
-			}
-
-		}
-	}
+//	public static void printUserBankAccounts() {
+//		UserOperations uop = new UserOperations();
+//		Map<User, List<BankAccount>> mapItems = uop.getUsersBankAccount();
+//
+//		for (User u : mapItems.keySet()) {
+//			List<BankAccount> baList = mapItems.get(u);
+//			System.out.println(u);
+//			if (baList != null) {
+//				for (BankAccount ba : baList) {
+//					System.out.println("--" + ba.printBankAcctDetails());
+//				}
+//			}
+//
+//		}
+//	}
 
 	public static void deleteUserBankAccount(int UserId, String accNum, List<User> userlist) {
 		for (User u : userlist) {
