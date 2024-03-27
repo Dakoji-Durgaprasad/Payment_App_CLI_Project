@@ -9,10 +9,10 @@ import java.util.Date;
 
 public class RunPaymentsApp {
 
-	public static List<User> userList = new ArrayList<User>();
+//	public static List<User> userList = new ArrayList<User>();
 	public static int currUserId = -1;
-	public static List<BankAccount> baAcctList = new ArrayList<BankAccount>();
-	public static Map<Integer, Wallet> walletList = new HashMap<Integer, Wallet>();
+//	public static List<BankAccount> baAcctList = new ArrayList<BankAccount>();
+//	public static Map<Integer, Wallet> walletList = new HashMap<Integer, Wallet>();
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
@@ -72,7 +72,7 @@ public class RunPaymentsApp {
 					WalletOperation();
 				}
 			} else if (op.equalsIgnoreCase("5")) {
-				System.out.println("List of users");
+				System.out.println("List of users: ");
 				// uop.printUsersList(userList);
 				try {
 					PaymentAppCliDAO dao = new PaymentAppCliDAO();
@@ -95,7 +95,7 @@ public class RunPaymentsApp {
 				}
 			} else if (op.equalsIgnoreCase("7")) {
 				if (currUserId != -1) {
-					System.out.println("List of users bank accounts");
+					System.out.println("List of users bank accounts: ");
 					PaymentAppCliDAO dao = new PaymentAppCliDAO();
 					try {
 						dao.printUserBankAcctDetails();
@@ -164,9 +164,9 @@ public class RunPaymentsApp {
 				e.printStackTrace();
 			}
 
-		Wallet wallet = new Wallet();
-		int userId = u.getUserId();
-		walletList.put(userId, wallet);
+//		Wallet wallet = new Wallet();
+//		int userId = u.getUserId();
+//		walletList.put(userId, wallet);
 
 	}
 
@@ -310,13 +310,16 @@ public class RunPaymentsApp {
 					Scanner scan = new Scanner(System.in);
 					System.out.println("Enter an amount: ");
 					double amount = scan.nextDouble();
-					wa.setBalance(wa.getBalance() + amount);
-					if (amount <= wa.getWalletAmountLimit()) {
-						UserOperations uop = new UserOperations();
-						uop.addMoneyToWallet(amount);
-					} else {
-						System.out.println("Out of the Wallet Limit!!");
-					}
+//					if (amount <= wa.getWalletAmountLimit()) {
+						PaymentAppCliDAO dao = new PaymentAppCliDAO();
+						try {
+							dao.addMoneyToWallet(amount,currUserId);
+						} catch (SQLException e) {
+							e.printStackTrace();
+						}
+//					} else {
+//						System.out.println("Out of the Wallet Limit!!");
+//					}
 					// System.out.println("Current Wallet Balance: " + wa.getBalance());
 					System.out.println();
 				} else {
@@ -327,12 +330,10 @@ public class RunPaymentsApp {
 
 			case 2:
 				if (currUserId != -1) {
-					UserOperations uop = new UserOperations();
+					PaymentAppCliDAO dao = new PaymentAppCliDAO();
 					try {
-						System.out.println("Current Wallet Balance: " + uop.checkWalletBalance());
-					} catch (NullPointerException ne) {
-						ne.printStackTrace();
-					} catch (Exception e) {
+						dao.checkCurrWalletbalance(currUserId);
+					} catch (SQLException e) {
 						e.printStackTrace();
 					}
 				}
