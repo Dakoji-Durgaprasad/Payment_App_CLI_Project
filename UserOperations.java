@@ -9,9 +9,9 @@ public class UserOperations {
 	public Map<Integer,Wallet> walletList=null;
 	
 	public UserOperations() {
-		users = RunPaymentsApp.userList;
-		baAcctList = RunPaymentsApp.baAcctList;
-		walletList=RunPaymentsApp.walletList;
+//		users = RunPaymentsApp.userList;
+//		baAcctList = RunPaymentsApp.baAcctList;
+//		walletList=RunPaymentsApp.walletList;
 	}
 	public User doUserRegistration(String fname,String lname,long phnum,String dob,String addr,String pswd) {
 		User u = new User();
@@ -70,28 +70,28 @@ public class UserOperations {
 //		return userBankAcctMap;
 //	}
 	
-	public boolean verifyUserBankAccount(String bankAcctNumber,String pin) {
-		for(int i=0;i<baAcctList.size();i++) {
-			if(String.valueOf(baAcctList.get(i).getBankAcctNumber()).equals(bankAcctNumber)) {
-				if(pin.equals(baAcctList.get(i).getBankAcctPin())) {
-					baAcctList.remove(i);
-					return true;
-				}
-			}
-		}
-		return false;
-	}
+//	public boolean verifyUserBankAccount(String bankAcctNumber,String pin) {
+//		for(int i=0;i<baAcctList.size();i++) {
+//			if(String.valueOf(baAcctList.get(i).getBankAcctNumber()).equals(bankAcctNumber)) {
+//				if(pin.equals(baAcctList.get(i).getBankAcctPin())) {
+//					baAcctList.remove(i);
+//					return true;
+//				}
+//			}
+//		}
+//		return false;
+//	}
 	
-	public void addMoneyToWallet(double amount) {
-		if(walletList.containsKey(RunPaymentsApp.currUserId)) {
-			walletList.get(RunPaymentsApp.currUserId).setBalance(walletList.get(RunPaymentsApp.currUserId ).getBalance()+amount);
-	        System.out.println("Current wallet Balance: "+walletList.get(RunPaymentsApp.currUserId ).getBalance());
-		}
-	}
-	
-	public double checkWalletBalance() {
-		return walletList.get(RunPaymentsApp.currUserId ).getBalance();
-	}
+//	public void addMoneyToWallet(double amount) {
+//		if(walletList.containsKey(RunPaymentsApp.currUserId)) {
+//			walletList.get(RunPaymentsApp.currUserId).setBalance(walletList.get(RunPaymentsApp.currUserId ).getBalance()+amount);
+//	        System.out.println("Current wallet Balance: "+walletList.get(RunPaymentsApp.currUserId ).getBalance());
+//		}
+//	}
+//	
+//	public double checkWalletBalance() {
+//		return walletList.get(RunPaymentsApp.currUserId ).getBalance();
+//	}
 
 		public boolean transaction(Wallet sender , Wallet receiver , TxnType type,double amount) {
 		if(sender.getBalance()>amount) {
