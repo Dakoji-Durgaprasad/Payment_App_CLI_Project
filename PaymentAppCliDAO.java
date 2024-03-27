@@ -38,10 +38,10 @@ public class PaymentAppCliDAO {
 			String printUserDetailsQuery = "select * from User_info";
 			ResultSet rs = st.executeQuery(printUserDetailsQuery);
 			while (rs.next()) {
-				System.out.println(
-						rs.getInt("Id") + " : " + rs.getString("First_Name") + " : " + rs.getString("Last_Name") + " : "
-								+ rs.getLong("Phone_Number") + " : " + rs.getString("Date_Of_Birth") + " : "
-								+ rs.getString("Address") + " : " + rs.getString("Password"));
+				System.out.println(rs.getInt("Id") + " : " + rs.getString("First_Name") + " : "
+						+ rs.getString("Last_Name") + " : " + rs.getLong("Phone_Number") + " : "
+						+ rs.getString("Date_Of_Birth") + " : " + rs.getString("Address") + " : "
+						+ rs.getString("Password") + " : " + rs.getDouble("Wallet_Balance"));
 			}
 			con.close();
 
@@ -87,7 +87,7 @@ public class PaymentAppCliDAO {
 					+ ba.getUserId() + "','" + ba.getBankBalance() + "')";
 
 			int rs = st.executeUpdate(storeUserBankAcctDetailsQuery);
-			System.out.println(rs + "row/s effected");
+			System.out.println(rs + " row/s effected");
 
 			con.close();
 
@@ -146,11 +146,48 @@ public class PaymentAppCliDAO {
 			ResultSet rs = st.executeQuery(printCurrUserDetailsQuery);
 
 			while (rs.next()) {
-				System.out.println(
-						rs.getInt("Id") + " : " + rs.getString("First_Name") + " : " + rs.getString("Last_Name") + " : "
-								+ rs.getLong("Phone_Number") + " : " + rs.getString("Date_Of_Birth") + " : "
-								+ rs.getString("Address") + " : " + rs.getString("Password") + " \n ");
+				System.out.println(rs.getInt("Id") + " : " + rs.getString("First_Name") + " : "
+						+ rs.getString("Last_Name") + " : " + rs.getLong("Phone_Number") + " : "
+						+ rs.getString("Date_Of_Birth") + " : " + rs.getString("Address") + " : "
+						+ rs.getString("Password") + " : " + rs.getDouble("Wallet_Balance") + " \n ");
 			}
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static void addMoneyToWallet(double amount, int userId) throws SQLException {
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/Payments_App_CLI", "root",
+					"root");
+			Statement st = con.createStatement();
+//			String balanceQuery = "SELECT Wallet_Balance FROM User_info WHERE Id = " + userId + "  ";
+//			ResultSet rs = st.executeQuery(balanceQuery);
+//			rs.next();
+//			String addMoneyToWalletQuery = "UPDATE User_info SET Wallet_balance = " + amount
+//					+ rs.getDouble("Wallet_Balance") + " WHERE Id=" + userId + " ";
+			
+			String addMoneyToWalletQuery = "UPDATE User_info SET Wallet_balance = " + amount +" WHERE Id=" + userId + " ";
+			int result = st.executeUpdate(addMoneyToWalletQuery);
+			System.out.println(result + " row/s effected");
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static void checkCurrWalletbalance(int userId) throws SQLException {
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/Payments_App_CLI", "root",
+					"root");
+			Statement st = con.createStatement();
+			String checkCurrWalletbalanceQuery = "SELECT Id, First_Name, Wallet_Balance FROM User_info WHERE Id = "
+					+ userId + " ";
+			ResultSet rs = st.executeQuery(checkCurrWalletbalanceQuery);
+			rs.next();
+			System.out.println(rs.getInt("Id") + " : " + rs.getString("First_Name") + " : "
+					+ rs.getDouble("Wallet_Balance") + "\n");
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
