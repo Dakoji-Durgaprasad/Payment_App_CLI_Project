@@ -162,13 +162,8 @@ public class PaymentAppCliDAO {
 			Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/Payments_App_CLI", "root",
 					"root");
 			Statement st = con.createStatement();
-//			String balanceQuery = "SELECT Wallet_Balance FROM User_info WHERE Id = " + userId + "  ";
-//			ResultSet rs = st.executeQuery(balanceQuery);
-//			rs.next();
-//			String addMoneyToWalletQuery = "UPDATE User_info SET Wallet_balance = " + amount
-//					+ rs.getDouble("Wallet_Balance") + " WHERE Id=" + userId + " ";
-			
-			String addMoneyToWalletQuery = "UPDATE User_info SET Wallet_balance = " + amount +" WHERE Id=" + userId + " ";
+			String addMoneyToWalletQuery = "UPDATE User_info SET Wallet_balance = Wallet_Balance + " + amount
+					+ " WHERE Id=" + userId + " ";
 			int result = st.executeUpdate(addMoneyToWalletQuery);
 			System.out.println(result + " row/s effected");
 		} catch (ClassNotFoundException e) {
