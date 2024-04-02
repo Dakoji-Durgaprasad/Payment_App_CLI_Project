@@ -13,8 +13,8 @@ public class Transaction {
 
 	private int userId;
 
-	Wallet srcWallet;
-	Wallet destWallet;
+	int srcWallet;
+	int destWallet;
 
 	public long getTxnId() {
 		return txnId;
@@ -88,19 +88,19 @@ public class Transaction {
 		this.userId = userId;
 	}
 
-	public Wallet getSrcWallet() {
+	public int getSrcWallet() {
 		return srcWallet;
 	}
 
-	public void setSrcWallet(Wallet srcWallet) {
-		this.srcWallet = srcWallet;
+	public void setSrcWallet(int sender) {
+		this.srcWallet = sender;
 	}
 
-	public Wallet getDestWallet() {
+	public int getDestWallet() {
 		return destWallet;
 	}
 
-	public void setDestWallet(Wallet destWallet) {
+	public void setDestWallet(int destWallet) {
 		this.destWallet = destWallet;
 	}
 
