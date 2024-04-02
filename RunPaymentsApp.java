@@ -14,7 +14,7 @@ public class RunPaymentsApp {
 //	public static List<BankAccount> baAcctList = new ArrayList<BankAccount>();
 //	public static Map<Integer, Wallet> walletList = new HashMap<Integer, Wallet>();
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws SQLException {
 		// TODO Auto-generated method stub
 
 		int SelectedOption = 0;
@@ -50,6 +50,7 @@ public class RunPaymentsApp {
 			}
 
 			UserOperations uop = new UserOperations();
+			PaymentAppCliDAO dao = new PaymentAppCliDAO();
 
 			if (op.equalsIgnoreCase("1")) {
 				System.out.println("User selected registartion");
@@ -74,53 +75,32 @@ public class RunPaymentsApp {
 			} else if (op.equalsIgnoreCase("5")) {
 				System.out.println("List of users: ");
 				// uop.printUsersList(userList);
-				try {
-					PaymentAppCliDAO dao = new PaymentAppCliDAO();
-					dao.printUserDetails();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
+				dao.printUserDetails();
+				
 			} else if (op.equalsIgnoreCase("6")) {
 				if (currUserId != -1) {
 					System.out.println("Current User: ");
-
-					//uop.printCurrUserDetails(currUserId);
-					PaymentAppCliDAO dao = new PaymentAppCliDAO();
-					try {
+					// uop.printCurrUserDetails(currUserId);
 						dao.printCurrUserDetails(currUserId);
-					} catch (SQLException e) {
-						e.printStackTrace();
-					}
-					
 				}
 			} else if (op.equalsIgnoreCase("7")) {
 				if (currUserId != -1) {
 					System.out.println("List of users bank accounts: ");
-					PaymentAppCliDAO dao = new PaymentAppCliDAO();
-					try {
 						dao.printUserBankAcctDetails();
-					} catch (SQLException e) {
-						e.printStackTrace();
-					}
 				}
 			} else if (op.equalsIgnoreCase("8")) {
 				if (currUserId != -1) {
 					System.out.println("Delete bank account");
 					System.out.println("Enter Bank Account Number: ");
 					int accNum = sc.nextInt();
-					PaymentAppCliDAO dao = new PaymentAppCliDAO();
-					try {
 						dao.deleteUserBankAccount(accNum);
-					} catch (SQLException e) {
-						e.printStackTrace();
-					}
 				} else {
 					System.out.println("please login to delete bank accounts");
 				}
 			} else if (op.equalsIgnoreCase("9")) {
 				if (currUserId != -1) {
 					System.out.println("DO TRANSACTION");
-					//transactionOperation();
+					transactionOperation();
 				}
 			} else if (op.equalsIgnoreCase("10")) {
 				if (currUserId != -1) {
@@ -157,12 +137,12 @@ public class RunPaymentsApp {
 		u = uop.doUserRegistration(fname, lname, phnum, dob, addr, pswd);
 		// userList.add(u);
 		PaymentAppCliDAO dao = new PaymentAppCliDAO();
-	
-			try {
-				dao.storeUserDetails(u);
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
+
+		try {
+			dao.storeUserDetails(u);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 
 //		Wallet wallet = new Wallet();
 //		int userId = u.getUserId();
@@ -182,7 +162,7 @@ public class RunPaymentsApp {
 
 		if (dao.verifyUserLogin(uId, pswd)) {
 			currUserId = uId;
-			//dao.verifyUserLogin(uId, pswd);
+			// dao.verifyUserLogin(uId, pswd);
 			return true;
 		}
 		return false;
@@ -272,23 +252,23 @@ public class RunPaymentsApp {
 //		}
 //	}
 
-	public static void deleteUserBankAccount(int UserId, String accNum, List<User> userlist) {
-		for (User u : userlist) {
-			if (u.getUserId() == UserId) {
-				List<BankAccount> baAcctList = u.getBaList();
-				Iterator<BankAccount> iterator = baAcctList.iterator();
-				while (iterator.hasNext()) {
-					BankAccount acct = iterator.next();
-					if (acct.getBankAcctNumber().equals(accNum)) {
-						iterator.remove();
-						System.out.println("BankAccount deleted successfully");
-						return;
-					}
-				}
-			}
-		}
-		System.out.println("Bank Account has Not matched");
-	}
+//	public static void deleteUserBankAccount(int UserId, String accNum, List<User> userlist) {
+//		for (User u : userlist) {
+//			if (u.getUserId() == UserId) {
+//				List<BankAccount> baAcctList = u.getBaList();
+//				Iterator<BankAccount> iterator = baAcctList.iterator();
+//				while (iterator.hasNext()) {
+//					BankAccount acct = iterator.next();
+//					if (acct.getBankAcctNumber().equals(accNum)) {
+//						iterator.remove();
+//						System.out.println("BankAccount deleted successfully");
+//						return;
+//					}
+//				}
+//			}
+//		}
+//		System.out.println("Bank Account has Not matched");
+//	}
 
 	public static void WalletOperation() {
 		while (true) {
@@ -311,12 +291,12 @@ public class RunPaymentsApp {
 					System.out.println("Enter an amount: ");
 					double amount = scan.nextDouble();
 //					if (amount <= wa.getWalletAmountLimit()) {
-						PaymentAppCliDAO dao = new PaymentAppCliDAO();
-						try {
-							dao.addMoneyToWallet(amount,currUserId);
-						} catch (SQLException e) {
-							e.printStackTrace();
-						}
+					PaymentAppCliDAO dao = new PaymentAppCliDAO();
+					try {
+						dao.addMoneyToWallet(amount, currUserId);
+					} catch (SQLException e) {
+						e.printStackTrace();
+					}
 //					} else {
 //						System.out.println("Out of the Wallet Limit!!");
 //					}
@@ -352,37 +332,57 @@ public class RunPaymentsApp {
 		}
 	}
 
-//	public static void transactionOperation() {
-//		if (currUserId != -1) {
-//			Scanner sc = new Scanner(System.in);
-//			Transaction transaction = new Transaction();
-//			Date date = new Date();
-//			UserOperations ops = new UserOperations();
-//			int i = 1;
-//			for (TxnType transactionType : TxnType.values()) {
-//				System.out.println(i + " " + transactionType);
-//				i++;
-//			}
-//			System.out.println("select an option to perform : ");
-//			int option = sc.nextInt();
-//			if (option == 1) {
-//				transaction.setTransactionType(TxnType.DEBIT);
-//				System.out.println("Select which type of transfer you want to perform: ");
-//				System.out.println("1.Wallet to Wallet");
-//				System.out.println("2.Bank to Bank");
-//				System.out.println("3.Bank to Wallet");
-//				System.out.println("4.Wallet to Bank");
-//				boolean result;
-//
-//				int transferType = sc.nextInt();
-//				System.out.println("Enter Transaction Amount : ");
-//				double tAmount = sc.nextDouble();
-//				transaction.setTxnAmount(tAmount);
-//				transaction.setTxnDate(date);
-//				transaction.setTxnId(date.getTime());
-//
-//				switch (transferType) {
-//				case 1:
+	public static void transactionOperation() throws SQLException {
+		if (currUserId != -1) {
+			Scanner sc = new Scanner(System.in);
+			Transaction transaction = new Transaction();
+			Date date = new Date();
+//			UserOperations uop = new UserOperations();
+			PaymentAppCliDAO dao = new PaymentAppCliDAO();
+			int i = 1;
+			for (TxnType transactionType : TxnType.values()) {
+				System.out.println(i + " " + transactionType);
+				i++;
+			}
+			System.out.println("select an option to perform : ");
+			int option = sc.nextInt();
+			if (option == 1) {
+				transaction.setTransactionType(TxnType.DEBIT);
+				System.out.println("Select which type of transfer you want to perform: ");
+				System.out.println("1.Wallet to Wallet");
+				System.out.println("2.Bank to Bank");
+				System.out.println("3.Bank to Wallet");
+				System.out.println("4.Wallet to Bank");
+				boolean result;
+
+				int transferType = sc.nextInt();
+				System.out.println("Enter an amount to transfer: ");
+				double txnAmount = sc.nextDouble();
+				transaction.setTxnAmount(txnAmount);
+				transaction.setTxnDate(date);
+				transaction.setTxnId(date.getTime());
+
+				switch (transferType) {
+				case 1:
+					int sender = currUserId;
+					transaction.setSrcWallet(sender);
+					System.out.println("Enter receivers UserId : ");
+					int receiver = sc.nextInt();
+					transaction.setDestWallet(receiver);
+					
+
+					if (dao.verifyWalletBalance(currUserId, txnAmount)) {
+						result = dao.doTxnWalletToWallet(sender, receiver, transaction.getTransactionType(), txnAmount);
+
+						if (result) {
+							System.out.println("Transaction Successfull !! \n");
+						} else {
+							System.out.println("Transaction Failed \n");
+						}
+					} else {
+						System.out.println("Insufficient Balance!! \n");
+					}
+
 //					Wallet source = walletList.get(currUserId);
 //					transaction.setSrcWallet(source);
 //					System.out.println("enter receiver userId : ");
@@ -390,15 +390,40 @@ public class RunPaymentsApp {
 //					Wallet destination = walletList.get(receiver);
 //					transaction.setDestWallet(destination);
 //					result = ops.transaction(source, destination, transaction.getTransactionType(), tAmount);
-//					if (result) {
-//						System.out.println("Transaction Successful \n");
-//					} else {
-//						System.out.println("Transaction Failed \n");
-//					}
-//
-//					break;
-//
-//				case 2:
+
+					break;
+
+				case 2:
+					System.out.println("Enter senders bankaccount number : ");
+					String senderAcctNum = sc.next();
+				
+					if(dao.verifyBankAcctNum(senderAcctNum)) {
+						System.out.println("Enter receivers bankaccount number : ");
+						String receiverAcctNum = sc.next();
+						
+						if(dao.verifyBankAcctNum(receiverAcctNum)) {
+							
+							if (dao.verifyBankBalance(currUserId, txnAmount)) {
+								
+								result = dao.doTxnBankToBank(senderAcctNum, receiverAcctNum, transaction.getTransactionType(), txnAmount);
+				
+								if (result) {
+									System.out.println("Transaction Successful \n");
+								} else {
+									System.out.println("Transaction Failed \n");
+								}
+							} else {
+								System.out.println("Insufficient Balance!! \n");
+							}
+							
+						}else {
+							System.out.println("Enter a valid Account number!! \n");
+						}
+						
+					}else {
+						System.out.println("Enter a valid Account number!! \n");
+					}
+					
 //					System.out.println("Enter sender bankaccount number : ");
 //					String senderAcctNum = sc.next();
 //					BankAccount source2 = null;
@@ -426,15 +451,44 @@ public class RunPaymentsApp {
 //
 //						transaction.setTxnSource(source2);
 //						transaction.setTxnDestination(destination2);
-//						result = ops.transaction(source2, destination2, transaction.getTransactionType(), tAmount);
+//						result = uop.transaction(source2, destination2, transaction.getTransactionType(), tAmount);
 //						if (result) {
 //							System.out.println("Transaction Successful \n");
 //						} else {
 //							System.out.println("Transaction Failed \n");
 //						}
 //					}
-//					break;
-//				case 3:
+					break;
+				case 3:
+					System.out.println("Enter senders bankaccount number : ");
+					String senderActNum = sc.next();
+				
+					if(dao.verifyBankAcctNum(senderActNum)) {
+						System.out.println("Enter receivers User ID : ");
+						int receiverUserId = sc.nextInt();
+						
+						if(dao.verifyUserId(receiverUserId)) {
+							
+							if (dao.verifyBankBalance(currUserId, txnAmount)) {
+								
+								result = dao.doTxnBankToWallet(senderActNum, receiverUserId, transaction.getTransactionType(), txnAmount);
+				
+								if (result) {
+									System.out.println("Transaction Successful \n");
+								} else {
+									System.out.println("Transaction Failed \n");
+								}
+							} else {
+								System.out.println("Insufficient Balance!! \n");
+							}
+							
+						}else {
+							System.out.println("Enter a valid User Id !! \n");
+						}
+						
+					}else {
+						System.out.println("Enter a valid Account number!! \n");
+					}
 //					System.out.println("Enter sender bankaccount number : ");
 //					String senderAcctNumBankToWallet = sc.next();
 //					BankAccount sourceBankToWallet = null;
@@ -457,15 +511,41 @@ public class RunPaymentsApp {
 //					int receiverId = sc.nextInt();
 //					Wallet destinationWallet = walletList.get(receiverId);
 //					transaction.setDestWallet(destinationWallet);
-//					result = ops.transaction(sourceBankToWallet, destinationWallet, transaction.getTransactionType(),
+//					result = uop.transaction(sourceBankToWallet, destinationWallet, transaction.getTransactionType(),
 //							tAmount);
 //					if (result) {
 //						System.out.println("Transaction Successful \n");
 //					} else {
 //						System.out.println("Transaction Failed \n");
 //					}
-//					break;
-//				case 4:
+					break;
+				case 4:
+					int senderUserId = currUserId;
+					transaction.setSrcWallet(senderUserId);
+					
+						System.out.println("Enter receivers bankaccount number : ");
+						String receiverAcctNum = sc.next();
+						
+						if(dao.verifyBankAcctNum(receiverAcctNum)) {
+							
+							if (dao.verifyWalletBalance(currUserId, txnAmount)) {
+								
+								result = dao.doTxnWalletToBank(senderUserId, receiverAcctNum, transaction.getTransactionType(), txnAmount);
+				
+								if (result) {
+									System.out.println("Transaction Successful \n");
+								} else {
+									System.out.println("Transaction Failed \n");
+								}
+							} else {
+								System.out.println("Insufficient Balance!! \n");
+							}
+							
+						}else {
+							System.out.println("Enter a valid Account number!! \n");
+						}
+						
+
 //					Wallet sourceWallet = walletList.get(currUserId);
 //					transaction.setSrcWallet(sourceWallet);
 //
@@ -483,19 +563,19 @@ public class RunPaymentsApp {
 //						e.printStackTrace();
 //					}
 //					transaction.setTxnDestination(destinationAccount);
-//					result = ops.transaction(sourceWallet, destinationAccount, transaction.getTransactionType(),
+//					result = uop.transaction(sourceWallet, destinationAccount, transaction.getTransactionType(),
 //							tAmount);
 //					if (result) {
 //						System.out.println("Transaction Successful \n");
 //					} else {
 //						System.out.println("Transaction Failed \n");
 //					}
-//					break;
+					break;
 //
-//				default:
-//					System.out.println("Please enter correct option\n");
-//				}
-//
+				default:
+					System.out.println("Please enter correct option\n");
+				}
+
 //			}
 //
 //			else if (option == 2) {
@@ -521,10 +601,10 @@ public class RunPaymentsApp {
 //				}
 //				transaction.setTxnSource(source);
 //				ops.creditAmountToAccount(source, tAmount);
-//			}
-//		}
-//	}
-//
+			}
+		}
+	}
+
 	public static void logout() {
 		currUserId = -1;
 	}
