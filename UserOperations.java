@@ -93,17 +93,17 @@ public class UserOperations {
 //		return walletList.get(RunPaymentsApp.currUserId ).getBalance();
 //	}
 
-		public boolean transaction(Wallet sender , Wallet receiver , TxnType type,double amount) {
-		if(sender.getBalance()>amount) {
-			receiver.setBalance(receiver.getBalance()+amount);
-			sender.setBalance(sender.getBalance()-amount);
-			return true;
-		}
-		return false;
-
-
-	}
-	
+//		public boolean transaction(Wallet sender , Wallet receiver , TxnType type,double amount) {
+//		if(sender.getBalance()>amount) {
+//			receiver.setBalance(receiver.getBalance()+amount);
+//			sender.setBalance(sender.getBalance()-amount);
+//			return true;
+//		}
+//		return false;
+//
+//
+//	}
+//	
 	// public boolean transaction(BankAccount sender , BankAccount receiver , TxnType tType,double amount) {
 	// 	if(sender.getBankBalance()>amount) {
 	// 		receiver.setBankBalance(receiver.getBankBalance()+amount);
