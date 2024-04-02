@@ -1,3 +1,4 @@
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -19,7 +20,7 @@ public class PaymentAppCliDAO {
 					+ u.getDateOfBirth() + "','" + u.getAddress() + "','" + u.getPassword() + "')";
 
 			int rs = st.executeUpdate(storeUserDetailsQuery);
-			System.out.println(rs + "row/s effected");
+			System.out.println(rs + "row/s effected.\n");
 
 			con.close();
 
@@ -64,10 +65,11 @@ public class PaymentAppCliDAO {
 			ResultSet rs = st.executeQuery(verifyUserLoginQuery);
 			while (rs.next()) {
 				System.out.println("Login Successfull \n");
+
+				con.close();
 				return true;
 			}
 			return false;
-
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
@@ -87,7 +89,7 @@ public class PaymentAppCliDAO {
 					+ ba.getUserId() + "','" + ba.getBankBalance() + "')";
 
 			int rs = st.executeUpdate(storeUserBankAcctDetailsQuery);
-			System.out.println(rs + " row/s effected");
+			System.out.println(rs + " row/s effected. \n");
 
 			con.close();
 
@@ -129,7 +131,8 @@ public class PaymentAppCliDAO {
 			PreparedStatement preSt = con.prepareStatement(deleteUserBankAcctQuery);
 			preSt.setInt(1, accNum);
 			int result = preSt.executeUpdate();
-			System.out.println(result + " record deleted.");
+			System.out.println(result + " record deleted.\n");
+			con.close();
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
@@ -151,6 +154,7 @@ public class PaymentAppCliDAO {
 						+ rs.getString("Date_Of_Birth") + " : " + rs.getString("Address") + " : "
 						+ rs.getString("Password") + " : " + rs.getDouble("Wallet_Balance") + " \n ");
 			}
+			con.close();
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
@@ -165,7 +169,8 @@ public class PaymentAppCliDAO {
 			String addMoneyToWalletQuery = "UPDATE User_info SET Wallet_balance = Wallet_Balance + " + amount
 					+ " WHERE Id=" + userId + " ";
 			int result = st.executeUpdate(addMoneyToWalletQuery);
-			System.out.println(result + " row/s effected");
+			System.out.println(result + " row/s effected. \n");
+			con.close();
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
@@ -183,9 +188,198 @@ public class PaymentAppCliDAO {
 			rs.next();
 			System.out.println(rs.getInt("Id") + " : " + rs.getString("First_Name") + " : "
 					+ rs.getDouble("Wallet_Balance") + "\n");
+			con.close();
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
+	}
+
+	public static boolean verifyWalletBalance(int userId, double amount) throws SQLException {
+
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/Payments_App_CLI", "root",
+					"root");
+			Statement st = con.createStatement();
+			String verifyWalletBalanceQuery = "SELECT Wallet_Balance FROM User_info WHERE Id = " + userId + " ";
+			ResultSet rs = st.executeQuery(verifyWalletBalanceQuery);
+			rs.next();
+			double walletBalance = rs.getDouble("Wallet_Balance");
+			if (amount < walletBalance) {
+				return true;
+			}
+			con.close();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+
+		return false;
+	}
+
+	public static boolean verifyBankBalance(int userId, double amount) throws SQLException {
+
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/Payments_App_CLI", "root",
+					"root");
+			Statement st = con.createStatement();
+			String verifyBankBalanceQuery = "SELECT BanK_Balance FROM BankAccount_Details WHERE User_Id = " + userId
+					+ " ";
+			ResultSet rs = st.executeQuery(verifyBankBalanceQuery);
+			rs.next();
+			double bankBalance = rs.getDouble("BanK_Balance");
+			if (amount < bankBalance) {
+				return true;
+			}
+			con.close();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+
+		return false;
+	}
+
+	public static boolean doTxnWalletToWallet(int sender, int receiver, TxnType type, double amount)
+			throws SQLException {
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/Payments_App_CLI", "root",
+					"root");
+			Statement st = con.createStatement();
+
+			String senderQuery = "UPDATE User_info SET Wallet_balance = Wallet_Balance - " + amount + " WHERE Id="
+					+ sender + " ";
+			String receiverQuery = "UPDATE User_info SET Wallet_balance = Wallet_Balance + " + amount + " WHERE Id="
+					+ receiver + " ";
+
+			int senderRs = st.executeUpdate(senderQuery);
+			int receiverRs = st.executeUpdate(receiverQuery);
+			
+			con.close();
+
+			return true;
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+
+	public static boolean verifyBankAcctNum(String acctNum) throws SQLException {
+		
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/Payments_App_CLI", "root",
+					"root");
+			Statement st = con.createStatement();
+			String verifyBankAcctNumQuery = "SELECT Account_Number FROM BankAccount_Details WHERE Account_Number ="+acctNum+" ";
+			ResultSet rs = st.executeQuery(verifyBankAcctNumQuery);
+			rs.next();
+			con.close();
+			return true;
+			
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		
+		return false;
+	}
+	
+	public static boolean doTxnBankToBank(String senderAcctNum, String receiverAcctNum, TxnType txnType, double amount) throws SQLException {
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/Payments_App_CLI", "root",
+					"root");
+			Statement st = con.createStatement();
+
+			String senderQuery = "UPDATE BankAccount_Details SET BanK_Balance = BanK_Balance - " + amount + " WHERE Id="
+					+ senderAcctNum + " ";
+			String receiverQuery = "UPDATE BankAccount_Details SET BanK_Balance = BanK_Balance + " + amount + " WHERE Id="
+					+ receiverAcctNum + " ";
+
+			int senderRs = st.executeUpdate(senderQuery);
+			int receiverRs = st.executeUpdate(receiverQuery);
+
+			System.out.println("Transaction Successfull!! \n");
+			con.close();
+
+			return true;
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+
+	public static boolean verifyUserId(int userId) throws SQLException {
+		
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/Payments_App_CLI", "root",
+					"root");
+			Statement st = con.createStatement();
+			String verifyUserIdQuery = "SELECT Id FROM User_info WHERE Id ="+userId+" ";
+			ResultSet rs = st.executeQuery(verifyUserIdQuery);
+			rs.next();
+			con.close();
+			return true;
+			
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		
+		
+		return false;
+	}
+	
+	public static boolean doTxnBankToWallet(String senderAcctNum, int receiverUserId, TxnType txnType, double amount) throws SQLException {
+		
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/Payments_App_CLI", "root",
+					"root");
+			Statement st = con.createStatement();
+
+			String senderQuery = "UPDATE BankAccount_Details SET BanK_Balance = BanK_Balance - " + amount + " WHERE Id="
+					+ senderAcctNum + " ";
+			String receiverQuery = "UPDATE User-info SET Wallet_Balance = Wallet_Balance + " + amount + " WHERE Id="
+					+ receiverUserId + " ";
+
+			int senderRs = st.executeUpdate(senderQuery);
+			int receiverRs = st.executeUpdate(receiverQuery);
+
+			System.out.println("Transaction Successfull!! \n");
+			con.close();
+
+			return true;
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+
+	public static boolean doTxnWalletToBank(int senderUserId, String receiverAcctNum, TxnType txnType, double amount) throws SQLException {
+		
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/Payments_App_CLI", "root",
+					"root");
+			Statement st = con.createStatement();
+
+			String senderQuery = "UPDATE User-info SET Wallet_Balance = Wallet_Balance + " + amount + " WHERE Id="
+					+ senderUserId + " ";
+			String receiverQuery = "UPDATE BankAccount_Details SET BanK_Balance = BanK_Balance - " + amount + " WHERE Id="
+					+ receiverAcctNum + " ";
+
+			int senderRs = st.executeUpdate(senderQuery);
+			int receiverRs = st.executeUpdate(receiverQuery);
+
+			System.out.println("Transaction Successfull!! \n");
+			con.close();
+
+			return true;
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		return false;
 	}
 
 }
