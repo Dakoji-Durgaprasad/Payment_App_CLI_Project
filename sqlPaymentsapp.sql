@@ -13,9 +13,21 @@ Address VARCHAR(150) NOT NULL,
 Password VARCHAR(15) NOT NULL
 );
 
+ALTER TABLE User_info 
+add column Wallet double not null;
+ALTER TABLE User_info 
+RENAME  COLUMN Wallet TO Wallet_Balance;
+
 DESC User_info;
 SELECT * FROM User_info;
--- DROP TABLE User_info;
+
+-- select Id, First_Name,Wallet_Balance FROM User_info;
+
+UPDATE User_info
+SET Wallet_balance = 500
+WHERE Id=1;
+
+DROP TABLE User_info;
 -- DROP TABLE Bank_Account_Type;
 -- DROP TABLE BankAccount_Details;
 -- DROP TABLE Transaction_Details;
