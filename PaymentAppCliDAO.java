@@ -364,9 +364,9 @@ public class PaymentAppCliDAO {
 					"root");
 			Statement st = con.createStatement();
 
-			String senderQuery = "UPDATE User-info SET Wallet_Balance = Wallet_Balance + " + amount + " WHERE Id="
+			String senderQuery = "UPDATE User_info SET Wallet_Balance = Wallet_Balance - " + amount + " WHERE Id="
 					+ senderUserId + " ";
-			String receiverQuery = "UPDATE BankAccount_Details SET BanK_Balance = BanK_Balance - " + amount + " WHERE Id="
+			String receiverQuery = "UPDATE BankAccount_Details SET BanK_Balance = BanK_Balance + " + amount + " WHERE Id="
 					+ receiverAcctNum + " ";
 
 			int senderRs = st.executeUpdate(senderQuery);
