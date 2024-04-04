@@ -291,15 +291,13 @@ public class PaymentAppCliDAO {
 					"root");
 			Statement st = con.createStatement();
 
-			String senderQuery = "UPDATE BankAccount_Details SET BanK_Balance = BanK_Balance - " + amount + " WHERE Id="
+			String senderQuery = "UPDATE BankAccount_Details SET BanK_Balance = BanK_Balance - " + amount + " WHERE Account_Number="
 					+ senderAcctNum + " ";
-			String receiverQuery = "UPDATE BankAccount_Details SET BanK_Balance = BanK_Balance + " + amount + " WHERE Id="
+			String receiverQuery = "UPDATE BankAccount_Details SET BanK_Balance = BanK_Balance + " + amount + " WHERE Account_Number="
 					+ receiverAcctNum + " ";
 
 			int senderRs = st.executeUpdate(senderQuery);
 			int receiverRs = st.executeUpdate(receiverQuery);
-
-			System.out.println("Transaction Successfull!! \n");
 			con.close();
 
 			return true;
@@ -338,15 +336,13 @@ public class PaymentAppCliDAO {
 					"root");
 			Statement st = con.createStatement();
 
-			String senderQuery = "UPDATE BankAccount_Details SET BanK_Balance = BanK_Balance - " + amount + " WHERE Id="
+			String senderQuery = "UPDATE BankAccount_Details SET BanK_Balance = BanK_Balance - " + amount + " WHERE Account_Number="
 					+ senderAcctNum + " ";
-			String receiverQuery = "UPDATE User-info SET Wallet_Balance = Wallet_Balance + " + amount + " WHERE Id="
+			String receiverQuery = "UPDATE User_info SET Wallet_Balance = Wallet_Balance + " + amount + " WHERE Id="
 					+ receiverUserId + " ";
 
 			int senderRs = st.executeUpdate(senderQuery);
 			int receiverRs = st.executeUpdate(receiverQuery);
-
-			System.out.println("Transaction Successfull!! \n");
 			con.close();
 
 			return true;
@@ -366,13 +362,30 @@ public class PaymentAppCliDAO {
 
 			String senderQuery = "UPDATE User_info SET Wallet_Balance = Wallet_Balance - " + amount + " WHERE Id="
 					+ senderUserId + " ";
-			String receiverQuery = "UPDATE BankAccount_Details SET BanK_Balance = BanK_Balance + " + amount + " WHERE Id="
+			String receiverQuery = "UPDATE BankAccount_Details SET BanK_Balance = BanK_Balance + " + amount + " WHERE Account_Number="
 					+ receiverAcctNum + " ";
 
 			int senderRs = st.executeUpdate(senderQuery);
 			int receiverRs = st.executeUpdate(receiverQuery);
+			con.close();
 
-			System.out.println("Transaction Successfull!! \n");
+			return true;
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+
+	public static boolean creditAmountToAccount(String acctNum, TxnType transactionType, double amount)  throws SQLException{
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/Payments_App_CLI", "root",
+					"root");
+			Statement st = con.createStatement();
+			String creditAmountToAccountQuery = "UPDATE BankAccount_Details SET BanK_Balance = BanK_Balance + " + amount + " WHERE Account_Number="
+					+ acctNum + " ";
+
+			int rs = st.executeUpdate(creditAmountToAccountQuery);
 			con.close();
 
 			return true;
