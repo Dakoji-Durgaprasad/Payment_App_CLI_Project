@@ -76,24 +76,24 @@ public class RunPaymentsApp {
 				System.out.println("List of users: ");
 				// uop.printUsersList(userList);
 				dao.printUserDetails();
-				
+
 			} else if (op.equalsIgnoreCase("6")) {
 				if (currUserId != -1) {
 					System.out.println("Current User: ");
 					// uop.printCurrUserDetails(currUserId);
-						dao.printCurrUserDetails(currUserId);
+					dao.printCurrUserDetails(currUserId);
 				}
 			} else if (op.equalsIgnoreCase("7")) {
 				if (currUserId != -1) {
 					System.out.println("List of users bank accounts: ");
-						dao.printUserBankAcctDetails();
+					dao.printUserBankAcctDetails();
 				}
 			} else if (op.equalsIgnoreCase("8")) {
 				if (currUserId != -1) {
 					System.out.println("Delete bank account");
 					System.out.println("Enter Bank Account Number: ");
 					int accNum = sc.nextInt();
-						dao.deleteUserBankAccount(accNum);
+					dao.deleteUserBankAccount(accNum);
 				} else {
 					System.out.println("please login to delete bank accounts");
 				}
@@ -369,7 +369,6 @@ public class RunPaymentsApp {
 					System.out.println("Enter receivers UserId : ");
 					int receiver = sc.nextInt();
 					transaction.setDestWallet(receiver);
-					
 
 					if (dao.verifyWalletBalance(currUserId, txnAmount)) {
 						result = dao.doTxnWalletToWallet(sender, receiver, transaction.getTransactionType(), txnAmount);
@@ -396,34 +395,35 @@ public class RunPaymentsApp {
 				case 2:
 					System.out.println("Enter senders bankaccount number : ");
 					String senderAcctNum = sc.next();
-				
-					if(dao.verifyBankAcctNum(senderAcctNum)) {
+
+					if (dao.verifyBankAcctNum(senderAcctNum)) {
 						System.out.println("Enter receivers bankaccount number : ");
 						String receiverAcctNum = sc.next();
-						
-						if(dao.verifyBankAcctNum(receiverAcctNum)) {
-							
+
+						if (dao.verifyBankAcctNum(receiverAcctNum)) {
+
 							if (dao.verifyBankBalance(currUserId, txnAmount)) {
-								
-								result = dao.doTxnBankToBank(senderAcctNum, receiverAcctNum, transaction.getTransactionType(), txnAmount);
-				
+
+								result = dao.doTxnBankToBank(senderAcctNum, receiverAcctNum,
+										transaction.getTransactionType(), txnAmount);
+
 								if (result) {
-									System.out.println("Transaction Successful \n");
+									System.out.println("Transaction Successfull !! \n");
 								} else {
 									System.out.println("Transaction Failed \n");
 								}
 							} else {
 								System.out.println("Insufficient Balance!! \n");
 							}
-							
-						}else {
+
+						} else {
 							System.out.println("Enter a valid Account number!! \n");
 						}
-						
-					}else {
+
+					} else {
 						System.out.println("Enter a valid Account number!! \n");
 					}
-					
+
 //					System.out.println("Enter sender bankaccount number : ");
 //					String senderAcctNum = sc.next();
 //					BankAccount source2 = null;
@@ -462,31 +462,32 @@ public class RunPaymentsApp {
 				case 3:
 					System.out.println("Enter senders bankaccount number : ");
 					String senderActNum = sc.next();
-				
-					if(dao.verifyBankAcctNum(senderActNum)) {
+
+					if (dao.verifyBankAcctNum(senderActNum)) {
 						System.out.println("Enter receivers User ID : ");
 						int receiverUserId = sc.nextInt();
-						
-						if(dao.verifyUserId(receiverUserId)) {
-							
+
+						if (dao.verifyUserId(receiverUserId)) {
+
 							if (dao.verifyBankBalance(currUserId, txnAmount)) {
-								
-								result = dao.doTxnBankToWallet(senderActNum, receiverUserId, transaction.getTransactionType(), txnAmount);
-				
+
+								result = dao.doTxnBankToWallet(senderActNum, receiverUserId,
+										transaction.getTransactionType(), txnAmount);
+
 								if (result) {
-									System.out.println("Transaction Successful \n");
+									System.out.println("Transaction Successfull !! \n");
 								} else {
 									System.out.println("Transaction Failed \n");
 								}
 							} else {
 								System.out.println("Insufficient Balance!! \n");
 							}
-							
-						}else {
+
+						} else {
 							System.out.println("Enter a valid User Id !! \n");
 						}
-						
-					}else {
+
+					} else {
 						System.out.println("Enter a valid Account number!! \n");
 					}
 //					System.out.println("Enter sender bankaccount number : ");
@@ -522,29 +523,29 @@ public class RunPaymentsApp {
 				case 4:
 					int senderUserId = currUserId;
 					transaction.setSrcWallet(senderUserId);
-					
-						System.out.println("Enter receivers bankaccount number : ");
-						String receiverAcctNum = sc.next();
-						
-						if(dao.verifyBankAcctNum(receiverAcctNum)) {
-							
-							if (dao.verifyWalletBalance(currUserId, txnAmount)) {
-								
-								result = dao.doTxnWalletToBank(senderUserId, receiverAcctNum, transaction.getTransactionType(), txnAmount);
-				
-								if (result) {
-									System.out.println("Transaction Successful \n");
-								} else {
-									System.out.println("Transaction Failed \n");
-								}
+
+					System.out.println("Enter receivers bankaccount number : ");
+					String receiverAcctNum = sc.next();
+
+					if (dao.verifyBankAcctNum(receiverAcctNum)) {
+
+						if (dao.verifyWalletBalance(currUserId, txnAmount)) {
+
+							result = dao.doTxnWalletToBank(senderUserId, receiverAcctNum,
+									transaction.getTransactionType(), txnAmount);
+
+							if (result) {
+								System.out.println("Transaction Successfull !! \n");
 							} else {
-								System.out.println("Insufficient Balance!! \n");
+								System.out.println("Transaction Failed \n");
 							}
-							
-						}else {
-							System.out.println("Enter a valid Account number!! \n");
+						} else {
+							System.out.println("Insufficient Balance!! \n");
 						}
-						
+
+					} else {
+						System.out.println("Enter a valid Account number!! \n");
+					}
 
 //					Wallet sourceWallet = walletList.get(currUserId);
 //					transaction.setSrcWallet(sourceWallet);
@@ -576,10 +577,32 @@ public class RunPaymentsApp {
 					System.out.println("Please enter correct option\n");
 				}
 
-//			}
+			}
 //
-//			else if (option == 2) {
-//				transaction.setTransactionType(TxnType.CREDIT);
+			else if (option == 2) {
+				transaction.setTransactionType(TxnType.CREDIT);
+				int userId = currUserId;
+				boolean result;
+				if (userId == currUserId) {
+					System.out.println("Enter an account number to credit amount: ");
+					String acctNum = sc.next();
+					if (dao.verifyBankAcctNum(acctNum)) {
+						System.out.println("Enter an amount to credit : ");
+						double amount = sc.nextDouble();
+						
+						result = dao.creditAmountToAccount(acctNum,
+								transaction.getTransactionType(), amount);
+
+						if (result) {
+							System.out.println("Transaction Successfull !! \n");
+						} else {
+							System.out.println("Transaction Failed \n");
+						}
+					}
+				}
+
+			}
+
 //				transaction.setTxnDate(date);
 //				transaction.setTxnId(date.getTime());
 //				System.out.println("Enter Account Number : ");
@@ -601,9 +624,9 @@ public class RunPaymentsApp {
 //				}
 //				transaction.setTxnSource(source);
 //				ops.creditAmountToAccount(source, tAmount);
-			}
 		}
 	}
+
 
 	public static void logout() {
 		currUserId = -1;
